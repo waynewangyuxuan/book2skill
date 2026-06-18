@@ -2,17 +2,18 @@
 
 **Distill reusable analysis skills from books — and an honest way to check they're useful.**
 
-A good analysis book isn't a bag of tricks; it's a *playbook* — a procedure for thinking about a problem. book2skill extracts that, at two levels:
+A good analysis book isn't a bag of tricks; it's a *playbook* — a procedure for thinking about a problem.
 
-- **Atomic methods** — the vocabulary. Short, many, content-agnostic ("detect a moat from two converging signals", "anchor a forecast on an outside-view base rate"). A retrieval library, not things you dump into a prompt.
-- **Playbooks** — the assembly. A gated, ordered procedure (spine + steps + branches) that *composes* the atomic methods into a complete analytical capability. **The playbook is the skill** — it ships as a loadable `SKILL.md`.
+**Terminology (used consistently throughout):**
+- **skill** = a **playbook**: a gated, ordered analytical procedure (spine + steps + branches) — a complete capability, shipped as a loadable `SKILL.md`. **This is the deliverable unit.**
+- **method** = an atomic building block ("detect a moat from two converging signals", "anchor a forecast on an outside-view base rate"). Methods are the *vocabulary a skill composes* — a retrieval library, **not skills on their own**, and not meant to be dumped into a prompt.
 
-Both are produced *by* a pipeline that is itself a set of loadable skills (the "distiller"), and judged by an eval rig built to be **falsifiable** — it can tell you a skill *doesn't* help, and why.
+So a book → a **method library** + one or more **skills (playbooks)** built from those methods. The pipeline that produces them (the "distiller") is itself a set of loadable agent-skills, and a **falsifiable** eval rig judges whether a skill actually helps.
 
 ## Layout
 | Dir | What |
 |---|---|
-| `skills/` | **The distilled skills.** Playbooks as loadable `SKILL.md` (e.g. `diagnose-and-manage-a-competitive-position-through-barriers-to-entry/`, `research-and-pick-a-stock/`, `diagnose-a-trade-imbalance-and-forecast-its-unwinding/`). `skills/_methods/` is the atomic-method library they reference, with `TAXONOMY.md`. |
+| `skills/` | **The skills** — each a playbook as a loadable `SKILL.md` (`research-and-pick-a-stock/`, `diagnose-and-manage-a-competitive-position-through-barriers-to-entry/`, `diagnose-a-trade-imbalance-and-forecast-its-unwinding/`, `forecast-a-binary-event/`). `skills/_methods/` is the **method library** they compose — building blocks, *not skills* — with `TAXONOMY.md`. |
 | `distiller/` | **The skill that distills skills.** The book2skill harness as loadable `SKILL.md`s (`book2skill` orchestrator → ingest → read-perspective → abstract-to-method → synthesize-taxonomy → trace-playbook → promote) + `contracts/` (data schemas) + `roster.md` (reader perspectives). |
 | `eval/` | **The eval methodology.** An outcome-grounded ablation rig (resolved prediction-market questions, scored against real outcomes) + an evaluator skill. See `eval/README.md`. |
 | `docs/` | **Design & thinking** — see [`docs/DESIGN.md`](docs/DESIGN.md). |
@@ -23,14 +24,14 @@ Both are produced *by* a pipeline that is itself a set of loadable skills (the "
 One book in → one immutable **run** + its **playbook(s)** + its **atomic methods**:
 1. **ingest** the book into anchored, per-chapter text.
 2. **open-code** it through several reader *perspectives* in parallel (trader, quant, historian, skeptic, teacher) — each harvests atoms its own way (grounded-theory open coding).
-3. **abstract** codes → atomic method cards, with a **RAG firewall**: if a method can't be stated without the book's specific example, it's dropped (it's knowledge, not a skill).
+3. **abstract** codes → atomic method cards, with a **RAG firewall**: if a method can't be stated without the book's specific example, it's dropped (it's knowledge, not a transferable method).
 4. **trace the playbook** — the book's latent decision procedure, wired to the atoms. This is the high-value product.
 5. **promote** atoms → the registry (cross-book deduped), playbook → a loadable skill.
 
 The three layers — **recipe** (`distiller/`) → **run** (`runs/`) → **output** (`skills/`) — mirror training code → a training run → model weights.
 
 ## Results so far
-- **3 books distilled** (a competitive-strategy text, an equity-research handbook, a macro/trade-imbalance text) → **250 atomic methods** under one **12-category taxonomy** + **4 playbooks** (3 from books + 1 forecasting playbook assembled from the reasoning atoms).
+- **3 books distilled** (a competitive-strategy text, an equity-research handbook, a macro/trade-imbalance text) → **4 skills** (playbooks), built on a shared **250-method library** under one 12-category taxonomy. *The headline count is skills (4); the 250 methods are the substrate, not 250 skills.* (3 skills traced from books + 1 forecasting skill composed from the methods.)
 - **Eval (v1):** the rig works and is honest. On out-of-domain binary forecasting it found that injecting reasoning methods — whether as a flat checklist or as a playbook — *did not help* a capable base model (it added a skepticism bias); the mechanism is documented. The point: an eval that can falsify "skill helps" is the one worth trusting. The in-domain test (where the base model genuinely lacks the method) is the next build.
 
 ## Use

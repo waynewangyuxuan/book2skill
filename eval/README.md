@@ -36,7 +36,7 @@ Substrate: 24 recent resolved Polymarket markets (macro / markets / geopolitics)
 | 3-arm (44 atoms) | Qwen3.6-35B | **0.229** | 0.260 | 0.270 |
 | 3-arm (44 atoms) | Qwen3.5-4B | **0.360** | 0.436 | 0.460 *(15/24 errored — overload)* |
 
-**Consistent, repeatable result: injecting these reasoning skills did *not* help — on a strong model or a weak one.** Mechanism (identical across runs): the skills add a **base-rate / skepticism bias** that lowers predicted probabilities (mean P 0.199 → 0.170 → 0.154 as injection strengthens). That is free on NO outcomes (already near-perfect) but **hurts every YES** (the events that actually happened). On the weak model, heavy injection additionally broke instruction-following.
+**Consistent, repeatable result: injecting these reasoning *methods* did *not* help — on a strong model or a weak one** (neither as a flat checklist nor composed into a playbook). Mechanism (identical across runs): the injected methods add a **base-rate / skepticism bias** that lowers predicted probabilities (mean P 0.199 → 0.170 → 0.154 as injection strengthens). That is free on NO outcomes (already near-perfect) but **hurts every YES** (the events that actually happened). On the weak model, heavy injection additionally broke instruction-following.
 
 ## What this does and doesn't show
 - ✅ **The methodology works** — it falsified "skill helps," pinned the mechanism, and survived a model-size confound check. An eval that can say *no* has teeth.
